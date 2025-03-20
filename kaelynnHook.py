@@ -378,17 +378,18 @@ def input_thread():
     refresh_thread.start()
     cmds = (
         "⌘ Available commands ⌘\n"
-        "  /status [message] - Set custom status (empty clears status).\n"
-        "  /clear - Clear the console and reset custom status.\n"
-        "  /pause - Pause updates.\n"
-        "  /resume - Resume updates.\n"
-        "  /exit - Exit gracefully.\n"
-        "  /get - Display current configuration.\n"
-        "  /set key value - Update a configuration setting (use dot notation for sections).\n"
-        "  /time - Send current local time to chatbox.\n"
-        "  /joke - Send a random joke.\n"
-        "  /rpc - Toggle Discord RPC sender on/off.\n"
-        "  /cmds - Show this command list."
+        "⌘  Any message without prefix will be sent to VRChat Chatbox.\n"
+        "⌘  /status [message] - Set custom status (empty clears status).\n"
+        "⌘  /clear - Clear the console and reset custom status.\n"
+        "⌘  /pause - Pause updates.\n"
+        "⌘  /resume - Resume updates.\n"
+        "⌘  /exit - Exit gracefully.\n"
+        "⌘  /get - Display current configuration.\n"
+        "⌘  /set key value - Update a configuration setting (use dot notation for sections).\n"
+        "⌘  /time - Send current local time to chatbox.\n"
+        "⌘  /joke - Send a random joke.\n"
+        "⌘  /rpc - Toggle Discord RPC sender on/off.\n"
+        "⌘  /cmds - Show this command list.\n"
     )
     jokes = config.get("jokes", [])
     while running:
