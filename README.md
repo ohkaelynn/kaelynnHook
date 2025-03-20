@@ -30,10 +30,10 @@ I built it as a lightweight alternative to buying Pulsoid ^^.
 ## Screenshots
 
 ### Main Usage
-![Main_Usage](https://i.imgur.com/DXzrMcK.png)
+![Main_Usage](https://i.imgur.com/MsTYtgZ.png)
 
 ### VRChat Chatbox
-![VRChat Chatbox](https://i.imgur.com/MsTYtgZ.png)
+![VRChat Chatbox](https://i.imgur.com/DXzrMcK.png)
 
 ### Discord Rich Presence
 ![Discord](https://i.imgur.com/ToUjV1W.png)
