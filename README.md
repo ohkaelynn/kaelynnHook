@@ -40,7 +40,7 @@ I built it as a lightweight alternative to buying Pulsoid ^^.
 
 ## Configuration
 
-All settings—including Spotify API credentials, VRChat OSC settings, Discord RPC options, display settings, and jokes—are stored in a JSON configuration file (`config.json`), making it easy to adjust the behavior of the script.
+All settings—including Spotify API credentials, VRChat OSC settings, Discord RPC options, display settings, and jokes—are stored in a JSON configuration file (`config.json`).
 
 ## Usage
 
@@ -50,4 +50,3 @@ All settings—including Spotify API credentials, VRChat OSC settings, Discord R
 
    ```bash
    python kaelynnHook.py
-```
