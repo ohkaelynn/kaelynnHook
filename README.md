@@ -1,3 +1,5 @@
+## WIP
+
 This is a personal tool that integrates BPM data from [Iron-Heart](https://github.com/nullstalgia/iron-heart/) with Spotify, and optionally Discord Rich Presence for just heart rate, trends and status.  
 I built it as a lightweight alternative to buying Pulsoid ^^.
 
