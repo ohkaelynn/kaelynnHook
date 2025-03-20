@@ -191,22 +191,18 @@ def print_config():
     print(json.dumps(config, indent=4))
 
 # --- HR & Status Functions ---
-def update_console_status(effective_bpm=None, status_message=""):
+def update_console_status(effective_bpm=None):
     global console_status
     lines = []
     if effective_bpm is not None:
         lines.append(f"⌘ HR: {effective_bpm} BPM")
-    custom_status = custom_rpc_state.strip() if custom_rpc_state and custom_rpc_state.strip() else ""
-    default_status = get_status_message(effective_bpm) if effective_bpm is not None else ""
-    if custom_status:
-        lines.append(f"⌘ Status: {custom_status}")
-    elif default_status:
-        lines.append(f"⌘ Status: {default_status}")
+    if custom_rpc_state and custom_rpc_state.strip():
+        lines.append(f"⌘ Custom Status: {custom_rpc_state.strip()}")
     if spotify_message:
         now_playing = spotify_message.splitlines()[0]
         lines.append(f"⌘ Now Playing: {now_playing}")
     rpc_status = "Enabled" if discord_active else "Disabled"
-    lines.append(f"⌘ RPC: {rpc_status}")
+    lines.append(f"⌘ Discord RPC: {rpc_status}")
     console_status = "\n".join(lines)
 
 def is_iron_heart_running():
@@ -251,11 +247,21 @@ def get_status_message(bpm):
 
 def format_message(bpm):
     heart_icon = get_heart_icon()
-    trend = detect_trend()
-    base_message = f"{heart_icon} {bpm} BPM {trend}"
-    status_message = (custom_rpc_state.strip() if custom_rpc_state and custom_rpc_state.strip()
-                      else get_status_message(bpm))
-    return f"{base_message} | {status_message}".strip() if status_message else base_message.strip()
+    base_message = f"{heart_icon} {bpm}"
+    if config["display"].get("enable_trend", True):
+        trend = detect_trend()
+        if trend:
+            base_message += f" {trend}"
+    parts = [base_message]
+    # Append contextual message if enabled.
+    if config["display"].get("enable_contextual", False):
+        contextual_message = config["display"].get("contextual_message", "").strip()
+        if contextual_message:
+            parts.append(contextual_message)
+    # Append custom status if provided.
+    if custom_rpc_state and custom_rpc_state.strip():
+        parts.append(custom_rpc_state.strip())
+    return " | ".join(parts)
 
 def send_to_vrchat(message):
     with update_lock:
@@ -271,18 +277,30 @@ def update_discord_rpc(bpm):
     if time.time() - last_discord_update_time < DISCORD_UPDATE_INTERVAL:
         return
     try:
+        # Build details: BPM (and trend, if enabled).
         details = f"⌘ {bpm} BPM"
-        raw_state = (custom_rpc_state.strip() if custom_rpc_state and custom_rpc_state.strip()
-                     else get_status_message(bpm))
-        trend = detect_trend()
-        if trend:
-            raw_state += f" {trend}"
-        update_kwargs = {"details": details, "state": raw_state.strip(), "start": None}
+        if config["display"].get("enable_trend", True):
+            trend = detect_trend()
+            if trend:
+                details += f" {trend}"
+        # Append contextual message to details if enabled.
+        if config["display"].get("enable_contextual", False):
+            contextual_message = config["display"].get("contextual_message", "").strip()
+            if contextual_message:
+                details += f" | {contextual_message}"
+        # State field: include the custom status with a "Status:" prefix, if provided.
+        state = f"Status: {custom_rpc_state.strip()}" if custom_rpc_state and custom_rpc_state.strip() else ""
+        
+        update_kwargs = {"details": details, "start": None}
+        if state:
+            update_kwargs["state"] = state
+        
         if discord_cfg.get("assets_enabled", False):
             update_kwargs["large_image"] = discord_cfg.get("large_image", "")
             update_kwargs["large_text"] = discord_cfg.get("large_text", "")
             update_kwargs["small_image"] = discord_cfg.get("small_image", "")
             update_kwargs["small_text"] = discord_cfg.get("small_text", "")
+        
         discord_rpc.update(**update_kwargs)
         last_discord_update_time = time.time()
     except Exception:
@@ -291,7 +309,7 @@ def update_discord_rpc(bpm):
 # --- Update Threads ---
 def main_loop():
     global hr_message, hr_history, last_sent_message, smoothed_bpm
-    update_console_status(status_message="Starting...")
+    update_console_status()  # Removed status_message keyword
     time.sleep(2)
     startup_msg = "⌘ kaelynnHook starting ⌘"
     send_to_vrchat(startup_msg)
@@ -321,13 +339,13 @@ def main_loop():
                             effective_bpm = bpm
                         hr_message = format_message(effective_bpm)
                         update_discord_rpc(effective_bpm)
-                        update_console_status(effective_bpm, status_message="⌘: Running")
+                        update_console_status(effective_bpm)  # Removed status_message argument
                     else:
-                        update_console_status(status_message="⌘: Waiting for BPM data...")
+                        update_console_status()  # Removed status_message argument
                 else:
-                    update_console_status(status_message="⌘: Iron-Heart.exe not running")
+                    update_console_status()  # Removed status_message argument
             else:
-                update_console_status(status_message="⌘: Paused")
+                update_console_status()  # Removed status_message argument
             time.sleep(vrchat_cfg["check_interval"])
         except KeyboardInterrupt:
             break
@@ -336,7 +354,6 @@ def main_loop():
             discord_rpc.close()
         except Exception:
             pass
-    print("\nExiting gracefully.")
 
 def update_spotify():
     global spotify_message
