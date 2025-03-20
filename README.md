@@ -1,17 +1,15 @@
-# kaelynnHook
-
-This is a personal tool that integrates BPM data from Iron-Heart with  Spotify, and optionally Discord Rich Presence for just heart rate, trends and status. 
+This is a personal tool that integrates BPM data from [Iron-Heart](https://github.com/nullstalgia/iron-heart/) with Spotify, and optionally Discord Rich Presence for just heart rate, trends and status.  
 I built it as a lightweight alternative to buying Pulsoid ^^.
 
 ## Features
 - **OSC Chat Sender (In VRC Only):**  
-  Pauses heart rate and allows you send chat messages without being overlapped.
+  Pauses heart rate and allows you to send chat messages without being overlapped.
 - **Reads BPM Data:**  
-  Reads heart rate data from a text file (populated by Iron-Heart) and applies optional exponential smoothing.
+  Reads heart rate data from a text file (populated by [Iron-Heart](https://github.com/nullstalgia/iron-heart/)) and applies optional exponential smoothing.
 - **VRChat OSC Updates:**  
   Sends formatted heart rate messages (with icons and trend symbols) via OSC to VRChat.
 - **Spotify Integration (In VRC Only):**  
-  Retrieves your currently playing track from Spotify and displays it with a progress bar along side heart rate
+  Retrieves your currently playing track from Spotify and displays it with a progress bar alongside heart rate.
 - **Discord RPC (Optional):**  
   Updates Discord Rich Presence with your BPM data. RPC is disabled by default. Use the `/rpc` command to toggle it on or off.
 
@@ -51,5 +49,5 @@ All settings—including Spotify API credentials, VRChat OSC settings, Discord R
 3. Run the script using your Python interpreter:
 
    ```bash
-   python iron-heart-chat.py
-   ```
+   python kaelynnHook.py
+```
