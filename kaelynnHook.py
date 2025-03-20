@@ -389,7 +389,7 @@ def input_thread():
         "⌘  /time - Send current local time to chatbox.\n"
         "⌘  /joke - Send a random joke.\n"
         "⌘  /rpc - Toggle Discord RPC sender on/off.\n"
-        "⌘  /cmds - Show this command list.\n"
+        "⌘  /cmds - Show this command list."
     )
     jokes = config.get("jokes", [])
     while running:
